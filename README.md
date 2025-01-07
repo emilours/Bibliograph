@@ -1,7 +1,7 @@
 
 # Bibliograph 📚
 
-For this project, I built Bibliograph, a book and author search app, using the **Google Books API** 📖. This API allows users to search for books and authors, retrieve detailed information, including **titles** 📚, **descriptions** 📝, and **links** 🔗 to more details on Google Books.
+For this project, I built Bibliograph, a book and author search app, using the **Google Books API** 📖 and **Wikipedia API**. This Google API allows users to search for books and authors, retrieve detailed information, including **titles** 📚, **descriptions** 📝, and **links** 🔗 to more details on Google Books.
 
 To create the app, I used **Flask**, a lightweight Python framework, for the backend. The app provides a simple and intuitive user interface where users can search for books by author or theme 📖. The results are displayed with book details like titles, descriptions, and images 📸, making it easy to explore new reads!
 
@@ -11,7 +11,7 @@ To create the app, I used **Flask**, a lightweight Python framework, for the bac
 - **Backend**: Flask, Python ⚙️
 
 ###  **Search by Author** 🖋️
-You can search for books by entering the name of an author. The app will display a list of books written by that author, including a brief description and a cover image. It's a great way to explore an author's works and find your next read!
+You can search for books by entering the name of an author. The app will display a list of books written by that author, including a brief description and a cover image. The **Wikipedia API** provides a preview of the author's biography, offering a quick glimpse into their life and works. It's a great way to explore an author's works and find your next read!
 
 ![Welcome](assets/searchByAuthor.gif)
 
@@ -20,13 +20,9 @@ You can also search for books based on specific themes. Just type in the theme y
 
 ![Welcome](assets/searchByTheme.gif)
 
-
-
 ## Acknowledgements
 
  - [Google Books API](https://developers.google.com/books/docs/v1/getting_started?hl=fr) : sign up to get an API key and create credentials for free
-
-
 
 ## Run Locally
 
