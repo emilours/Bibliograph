@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search information on authors and books 📚</title>
+    <!-- Lien vers Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Lien vers Font Awesome pour les icônes -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- Lien vers une police élégante (Google Fonts) -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Lien vers le CSS personnalisé -->
+    <style>
+        body {
+            font-family: 'Merriweather', serif;
+            background-color: #f4f7f6;
+        }
+
+        .navbar {
+            background-color: #6c757d;
+            display: flex;
+            justify-content: center;
+            /* Centre horizontalement tout le contenu de la navbar */
+            align-items: center;
+            /* Centre verticalement le contenu */
+        }
+
+        .navbar-brand {
+            color: #fff !important;
+            font-weight: bold;
+            text-align: center;
+            /* Optionnel, car flexbox gère déjà l'alignement */
+        }
+
+        .search-container {
+            background: linear-gradient(145deg, #ff7a18, #af002d);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-container h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .search-container .form-group label {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .btn-primary {
+            background-color: #af002d;
+            border: none;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            background-color: #9e001f;
+        }
+
+        .book-card {
+            margin-bottom: 30px;
+        }
+
+        .card-img-top {
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .card-text {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .bio-text {
+            font-size: 1.1rem;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .bio-header {
+            margin-top: 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #6c757d;
+        }
+
+        .footer {
+            background-color: #6c757d;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container d-flex justify-content-center">
+            <a class="navbar-brand" href="#">BIBLIOGRAPH 📖</a>
+        </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container mt-5 search-container">
+        <h1 class="text-center">Explore authors' universes 📚✨</h1>
+
+        <!-- Formulaire de recherche -->
+        <form action="/" method="POST">
+            <div class="form-group">
+                <label for="author">Author's name 🖋️ :</label>
+                <input type="text" id="author" name="author" class="form-control" placeholder="Enter author's name"
+                    value="{{ author_name or '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="theme">Books' themes 📖 :</label>
+                <input type="text" id="theme" name="theme" class="form-control"
+                    placeholder="Enter a theme (example : Science Fiction)" value="{{ theme or '' }}">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">SEARCH 🔍</button>
+        </form>
+    </div>
+
+    <!-- Affichage des résultats et biographie dans le même conteneur -->
+    <div class="container mt-5">
+
+        <!-- Vérifier si l'auteur ou le thème est renseigné -->
+        {% if author_name or theme %}
+        
+            <!-- Affichage des livres par auteur -->
+            {% if books_by_author %}
+            <h3 class="text-center">Author's books 📚:</h3> <!-- Centrer le titre -->
+            <div class="row">
+                {% if books_by_author|length > 0 %}
+                    {% for book in books_by_author %}
+                    {% if book['description'] %}
+                    <div class="col-md-4">
+                        <div class="card book-card">
+                            <img src="{{ book['image'] }}" class="card-img-top" alt="{{ book['title'] }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ book['title'] }} 📖</h5>
+                                <p class="card-text">
+                                    {{ book['description'][:100] }}<span id="dots{{ loop.index }}">...</span>
+                                    <span id="more{{ loop.index }}" class="collapse">{{ book['description'][100:] }}</span>
+                                </p>
+                                <button class="btn btn-link" onclick="toggleDescription({{ loop.index }})">Read more</button>
+                                <a href="{{ book['infoLink'] }}" target="_blank" class="btn btn-secondary btn-block">
+                                    See on Google Books 🔗
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center">No books found for this author.</p>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Biographie de l'auteur -->
+            {% if author_bio %}
+            <h4 class="bio-header">Author's introduction ✍️ :</h4>
+            <p class="bio-text">{{ author_bio }}</p>
+            {% endif %}
+
+            <!-- Affichage des livres par thème -->
+            {% if books_by_theme %}
+            <h3 class="bio-header">Thematic books 📚 :</h3>
+            <div class="row">
+                {% for book in books_by_theme %}
+                <div class="col-md-4">
+                    <div class="card book-card">
+                        <img src="{{ book['image'] }}" class="card-img-top" alt="{{ book['title'] }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ book['title'] }} 📖</h5>
+                            <p class="card-text">
+                                {{ book['description'][:100] }}<span id="dots{{ loop.index }}">...</span>
+                                <span id="more{{ loop.index }}" class="collapse">{{ book['description'][100:] }}</span>
+                            </p>
+                            <button class="btn btn-link" onclick="toggleDescription({{ loop.index }})">read more</button>
+                            <a href="{{ book['infoLink'] }}" target="_blank" class="btn btn-secondary btn-block">
+                                See on Google Books 🔗
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        
+        {% endif %}
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2025 BIBLIOGRAPH 📚. All rights reserved.</p>
+    </div>
+
+    <!-- Lien vers le script Bootstrap JS et ses dépendances -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Script pour gérer l'affichage de la description -->
+    <script>
+        function toggleDescription(index) {
+            var dots = document.getElementById('dots' + index);
+            var moreText = document.getElementById('more' + index);
+            var btnText = event.target;
+
+            if (moreText.classList.contains('show')) {
+                dots.style.display = 'inline';
+                moreText.classList.remove('show');
+                btnText.textContent = 'Lire la suite';
+            } else {
+                dots.style.display = 'none';
+                moreText.classList.add('show');
+                btnText.textContent = 'Voir moins';
+            }
+        }
+    </script>
+</body>
+
+</html>
