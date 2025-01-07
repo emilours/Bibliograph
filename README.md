@@ -51,7 +51,7 @@ You can also search for books based on specific themes. Just type in the theme y
 **Run Locally:**
 
 ```bash
-  python Bibliograph.py
+  python bibliographApp.py
 ```
 
 **Go on localhost:**
