@@ -16,7 +16,6 @@ def search_book_by_author(author_name):
     if response.status_code == 200:
         data = response.json()
 
-        print("DATA RECEIVED: ", data)
         if 'items' in data:
             book_info = []
             for book in data['items']:
