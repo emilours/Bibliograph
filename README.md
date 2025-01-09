@@ -40,6 +40,7 @@ You can also search for books based on specific themes. Just type in the theme y
     pip install flask
     pip install requests
     pip install beautifulsoup4
+    pip install python-dotenv
 ```
 
 **Create .env and fill it with you API key:**
